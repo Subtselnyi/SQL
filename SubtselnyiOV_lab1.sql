@@ -24,20 +24,11 @@ SELECT "CompanyName" from [NORTHWND].[dbo].[Suppliers] ORDER BY "CompanyName" DE
 --get all orders, change columns for numbers
 SELECT 
 	OrderID AS '1', 
-	CustomerID AS '2', 
-	EmployeeID AS '3', 
-	OrderDate AS '4', 
-	RequiredDate AS '5',
-	ShippedDate AS '6', 
-	ShipVia AS '7', 
-	Freight AS '8', 
-	ShipName AS '9', 
-	ShipAddress AS '10', 
-	ShipCity AS '11', 
-	ShipRegion AS '12', 
-	ShipPostalCode AS '13', 
-	ShipCountry AS '14'
-FROM [NORTHWND].[dbo].[Orders Details]
+	ProductID AS '2',
+	UnitPrice AS '3',
+	Quantity AS '4',
+	Discount AS '5'
+FROM [NORTHWND].[dbo].[Order Details]
 
 
 --Task7
