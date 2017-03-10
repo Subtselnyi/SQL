@@ -56,8 +56,12 @@ WHERE OD.[OrderID] IN
 SELECT ORD.[ShipAddress]
 FROM [NORTHWND].[dbo].[Orders] AS ORD
 WHERE ORD.[OrderID] IN 
-(SELECT TOP(1) [OrderID] 
+(SELECT  [OrderID] 
  FROM [NORTHWND].[dbo].[Order Details] AS OD
  GROUP BY OD.[OrderID]
- ORDER BY SUM([Quantity]*[UnitPrice]*(1-[Discount])) DESC );
+ HAVING SUM([Quantity]*[UnitPrice]*(1-[Discount])) = (SELECT TOP(1) (SUM([Quantity]*[UnitPrice]*(1-[Discount])))
+                                                      FROM [NORTHWND].[dbo].[Order Details]
+                                                      GROUP BY [OrderID]
+                                                      ORDER BY (SUM([Quantity]*[UnitPrice]*(1-[Discount]))) DESC )
+)
 
