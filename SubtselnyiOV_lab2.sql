@@ -65,3 +65,15 @@ WHERE ORD.[OrderID] IN
                                                       ORDER BY (SUM([Quantity]*[UnitPrice]*(1-[Discount]))) DESC )
 )
 
+
+--  Task5 New Variant with CTE and MAX
+WITH [SumOD] AS (SELECT SUM([Quantity]*[UnitPrice]*(1-[Discount])) AS 'TotalOrderSum'
+                  FROM [NORTHWND].[dbo].[Order Details]
+                  GROUP BY [OrderID])
+
+
+SELECT [ShipAddress]
+FROM [NORTHWND].[dbo].[Orders]
+WHERE [OrderID] IN (SELECT [OrderID] FROM [NORTHWND].[dbo].[Order Details] AS OD
+				    GROUP BY OD.[OrderID]
+                    HAVING SUM([Quantity]*[UnitPrice]*(1-[Discount])) = (SELECT MAX([TotalOrderSum]) FROM [SumOD]))
