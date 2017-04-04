@@ -81,5 +81,83 @@ PRINT [NORTHWND].[dbo].[calculate] (2, 2, 0.5)
 
 --  Task8
 
+CREATE FUNCTION PascalCase (@Str VARCHAR(8000)) 
+RETURNS VARCHAR(8000) AS 
+BEGIN   
+DECLARE @Result VARCHAR(2000)   
+SET @Str = LOWER(@Str) + ' '   
+SET @Result = ''   
+WHILE 1=1   
+BEGIN     
+IF PATINDEX('% %',@Str) = 0 
+BREAK     
+SET @Result = @Result + UPPER(Left(@Str,1))+     SubString  (@Str,2,CharIndex(' ',@Str)-2)     
+SET @Str = SubString(@Str,       CharIndex(' ',@Str)+1,Len(@Str))   
+END   
+SET @Result = Left(@Result,Len(@Result))   
+RETURN @Result 
+END 
+
+PRINT [dbo].[PascalCase]('My little poni')
+
+--  Task9
+
+CREATE FUNCTION employeeInfo
+(
+    @country NVARCHAR(50)
+)
+RETURNS @employeeTable TABLE (  [EmployeeID] INT NOT NULL,
+								[LastName] NVARCHAR(20) NOT NULL,
+								[FirstName] NVARCHAR(10) NOT NULL,
+								[Title] NVARCHAR(30) NULL,
+								[TitleOfCourtesy] NVARCHAR(25) NULL,
+								[BirthDate] DATETIME NULL,
+								[HireDate]  DATETIME NULL,
+								[Address] NVARCHAR(60) NULL,
+								[City] NVARCHAR(15) NULL,
+								[Region] NVARCHAR(15) NULL,
+								[PostalCode] NVARCHAR(10) NULL,
+								[Country] NVARCHAR(15) NULL,
+								[HomePhone] NVARCHAR(24) NULL,
+								[Extension] NVARCHAR(4) NULL,
+								[Photo] IMAGE NULL,
+								[Notes] NTEXT NULL,
+								[ReportsTo] INT NULL,
+								[PhotoPath] NVARCHAR(255) NULL) AS
+    BEGIN
+        INSERT INTO @employeeTable 
+        SELECT * FROM [NORTHWND].[dbo].[Employees]
+        WHERE [Country] = @country
+		RETURN
+    END
+
+SELECT * FROM [NORTHWND].[dbo].[employeeInfo]('USA')
+
+--  Task10
+
+
+CREATE FUNCTION customersOfCompany
+(
+    @companyName NVARCHAR(80)
+)
+RETURNS @customerTable TABLE(   [CustomerID] NCHAR(5) NOT NULL,
+								[CompanyName] NVARCHAR(40) NOT NULL,
+								[ContactName] NVARCHAR(30) NULL,
+								[ContactTitle] NVARCHAR(30) NULL,
+								[Address] NVARCHAR(60) NULL,
+								[City] NVARCHAR(15) NULL,
+								[Region] NVARCHAR(15) NULL,
+								[PostalCode] NVARCHAR(10) NULL,
+								[Country] NVARCHAR(15) NULL,
+								[Phone] NVARCHAR(24) NULL,
+								[Fax] NVARCHAR(24) NULL) AS
+    BEGIN
+        INSERT INTO @customerTable
+        SELECT * FROM [NORTHWND].[dbo].[Customers]
+        WHERE [CompanyName] LIKE @companyName
+        RETURN
+    END
+
+SELECT * FROM [NORTHWND].[dbo].[customersOfCompany]('Alfreds Futterkiste')
 
 
